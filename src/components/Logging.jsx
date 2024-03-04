@@ -7,13 +7,13 @@ import {
 } from "firebase/auth";
 import { db, auth } from "../firebase-config";
 import Task from "./Tasks";
-
+import axios from "axios";
 export default function Logging() {
   let [user, setUser] = useState(null);
   let [password, setPassword] = useState(null);
   let [email, setEmail] = useState(null);
   let [id, setId] = useState(null);
-
+  let [image, setImage] = useState(null);
   useEffect(() => {
     let a = onAuthStateChanged(auth, (i) => {
       if (i) {
@@ -21,11 +21,15 @@ export default function Logging() {
         setId(i.uid);
       } else {
         setUser(null);
+        axi();
       }
     });
 
+    let axi = async () => {
+      let ax = await axios.get("https://dog.ceo/api/breeds/image/random");
+      setImage(ax.data.message);
+    };
     return () => a();
-    
   }, []);
 
   let createUser = async () => {
@@ -42,7 +46,6 @@ export default function Logging() {
       console.error(err);
     }
   };
-  
 
   return (
     <div>
@@ -80,6 +83,7 @@ export default function Logging() {
           >
             log in
           </button>
+          <img src={image} alt="adsasd" />
         </div>
       )}
     </div>
