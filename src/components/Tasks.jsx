@@ -8,6 +8,8 @@ import {
   updateDoc,
   getDoc,
 } from "firebase/firestore";
+import {onAuthStateChanged} from 'firebase/auth'
+import {auth} from '../firebase-config'
 import "./a.css";
 import { db } from "../firebase-config";
 export default function Task(props) {
@@ -15,6 +17,7 @@ export default function Task(props) {
   let [details, setDetails] = useState("");
   let [list, setList] = useState([]);
   let [listDisplay, setListDisplay] = useState([]);
+  let [counter,setCounter] = useState(0);
   let getTime = () => {
     let currentdate = new Date();
     let datetime =
@@ -98,6 +101,18 @@ export default function Task(props) {
       console.log(err);
     }
   };
+  useEffect(() => {
+    let a = onAuthStateChanged(auth, (i) => {
+      if (i) {
+        setUser(i);
+        setId(i.uid);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => a();
+  }, []);
   return (
     <div>
       <h1>your tasks {props.userId}</h1>
