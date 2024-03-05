@@ -114,58 +114,66 @@ export default function Task() {
 
   return (
     <div>
-      <h1>your tasks </h1>
-      <h2>search task {email}</h2>
-
-      <input type="text" onChange={(e) => display(e)} />
-      <br />
-      <br />
-
-      <form style={{ display: "inline-flex", border: "solid black 6px" }}>
+      {user ? (
         <div>
-          <input
-            type="text"
-            placeholder="task name"
-            onChange={(e) => setTaskName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="details"
-            onChange={(e) => setDetails(e.target.value)}
-          />
-        </div>
-      </form>
+          <h1>your tasks </h1>
+          <h2>search task {email}</h2>
 
-      <button onClick={add}>add task </button>
+          <input type="text" onChange={(e) => display(e)} />
+          <br />
+          <br />
 
-      {listDisplay.map(function (d, i) {
-        return (
-          <div
-            title={d.modify}
-            className={`${
-              d.isComplete ? "finish" : `${i % 2 == 0 ? "task1" : "task2"}`
-            }`}
-          >
-            <p>{d.taskName}</p>
-            <p>{d.details}</p>
-            <label>
-              {d.isComplete ? "finish" : "notfinish"}
+          <form style={{ display: "inline-flex", border: "solid black 6px" }}>
+            <div>
               <input
-                type="checkbox"
-                name="done"
-                id="done"
-                onChange={() => updateStatus(d.id)}
-                defaultChecked={d.isComplete}
+                type="text"
+                placeholder="task name"
+                onChange={(e) => setTaskName(e.target.value)}
               />
-            </label>
-            <br />
-            <button onClick={() => remove(d.id)}>remove</button>
-          </div>
-        );
-      })}
+              <input
+                type="text"
+                placeholder="details"
+                onChange={(e) => setDetails(e.target.value)}
+              />
+            </div>
+          </form>
 
-      <br />
-      <br />
+          <button onClick={add}>add task </button>
+
+          {listDisplay.map(function (d, i) {
+            return (
+              <div
+                title={d.modify}
+                className={`${
+                  d.isComplete ? "finish" : `${i % 2 == 0 ? "task1" : "task2"}`
+                }`}
+              >
+                <p>{d.taskName}</p>
+                <p>{d.details}</p>
+                <label>
+                  {d.isComplete ? "finish" : "notfinish"}
+                  <input
+                    type="checkbox"
+                    name="done"
+                    id="done"
+                    onChange={() => updateStatus(d.id)}
+                    defaultChecked={d.isComplete}
+                  />
+                </label>
+                <br />
+                <button onClick={() => remove(d.id)}>remove</button>
+              </div>
+            );
+          })}
+
+          <br />
+          <br />
+        </div>
+      ) : (
+        <div>
+          <h1>pls log in</h1>
+        </div>
+      )}
     </div>
   );
 }
