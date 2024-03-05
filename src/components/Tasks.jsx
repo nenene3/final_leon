@@ -13,7 +13,8 @@ import { auth } from "../firebase-config";
 import { getAuth } from "firebase/auth";
 import "./a.css";
 import { db } from "../firebase-config";
-export default function Task() {
+import Task from "./Task";
+export default function Tasks() {
   let[email,setEmail]=useState("");
   let [user, setUser] = useState(null);
   let [taskName, setTaskName] = useState("");
@@ -102,8 +103,7 @@ export default function Task() {
     try {
       let docChange = doc(db, user, name);
       const docSnap = await getDoc(docChange);
-      console.log(docSnap);
-      console.log(docSnap);
+
       let a = await updateDoc(docChange, {
         isComplete: !docSnap.data().isComplete,
       });
@@ -142,27 +142,7 @@ export default function Task() {
 
           {listDisplay.map(function (d, i) {
             return (
-              <div
-                title={d.modify}
-                className={`${
-                  d.isComplete ? "finish" : `${i % 2 == 0 ? "task1" : "task2"}`
-                }`}
-              >
-                <p>{d.taskName}</p>
-                <p>{d.details}</p>
-                <label>
-                  {d.isComplete ? "finish" : "notfinish"}
-                  <input
-                    type="checkbox"
-                    name="done"
-                    id="done"
-                    onChange={() => updateStatus(d.id)}
-                    defaultChecked={d.isComplete}
-                  />
-                </label>
-                <br />
-                <button onClick={() => remove(d.id)}>remove</button>
-              </div>
+              <Task isComplete={d.isComplete} taskName={d.taskName} details={d.details} id={d.id} modify={d.modify} i={i} user={user}/>
             );
           })}
 

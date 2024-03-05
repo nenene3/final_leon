@@ -11,13 +11,12 @@ export default function Logging() {
   let [user, setUser] = useState(null);
   let [password, setPassword] = useState(null);
   let [email, setEmail] = useState(null);
-  let [id, setId] = useState(null);
+  
 
   useEffect(() => {
     let a = onAuthStateChanged(auth, (i) => {
       if (i) {
         setUser(i);
-        setId(i.uid);
       } else {
         setUser(null);
       }
