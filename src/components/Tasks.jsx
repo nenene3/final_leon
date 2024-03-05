@@ -8,17 +8,19 @@ import {
   updateDoc,
   getDoc,
 } from "firebase/firestore";
-import {onAuthStateChanged} from 'firebase/auth'
-import {auth} from '../firebase-config'
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase-config";
+import { getAuth } from "firebase/auth";
 import "./a.css";
 import { db } from "../firebase-config";
-export default function Task(props) {
-  let [user,setUser] =useState(null);
+export default function Task() {
+  let[email,setEmail]=useState("");
+  let [user, setUser] = useState(null);
   let [taskName, setTaskName] = useState("");
   let [details, setDetails] = useState("");
   let [list, setList] = useState([]);
   let [listDisplay, setListDisplay] = useState([]);
-  let [counter,setCounter] = useState(0);
+  let [counter, setCounter] = useState(0);
   let getTime = () => {
     let currentdate = new Date();
     let datetime =
@@ -37,12 +39,12 @@ export default function Task(props) {
 
     return datetime;
   };
+
   let add = async () => {
     if (!details || !taskName) return;
     try {
       let time = getTime();
-
-      const docRef = await addDoc(collection(db, props.userId), {
+      const docRef = await addDoc(collection(db, user), {
         taskName: taskName,
         details: details,
         modify: time,
@@ -57,23 +59,30 @@ export default function Task(props) {
   };
 
   useEffect(() => {
-    const getUsersData = async () => {
-      const arr = await getDocs(collection(db, props.userId));
-      setList(
-        arr.docs.map((element) => ({ ...element.data(), id: element.id }))
-      );
-      setListDisplay(
-        arr.docs.map((element) => ({ ...element.data(), id: element.id }))
-      );
-    };
-    getUsersData();
-
-    console.log(list);
-  }, [props.userId]);
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("succc");
+        setUser(user.uid)
+        setEmail(user.email)
+        const getUsersData = async () => {
+          const arr = await getDocs(collection(db, user.uid));
+          setList(
+            arr.docs.map((element) => ({ ...element.data(), id: element.id }))
+          );
+          setListDisplay(
+            arr.docs.map((element) => ({ ...element.data(), id: element.id }))
+          );
+        };
+        getUsersData();
+      } else {
+        console.log(user);
+      }
+    });
+  }, []);
 
   let remove = async (name) => {
     try {
-      await deleteDoc(doc(db, props.userId, name));
+      await deleteDoc(doc(db, user, name));
 
       window.location.reload();
     } catch (e) {
@@ -91,7 +100,7 @@ export default function Task(props) {
 
   let updateStatus = async (name) => {
     try {
-      let docChange = doc(db, props.userId, name);
+      let docChange = doc(db, user, name);
       const docSnap = await getDoc(docChange);
       console.log(docSnap);
       console.log(docSnap);
@@ -102,22 +111,11 @@ export default function Task(props) {
       console.log(err);
     }
   };
-  useEffect(() => {
-    let a = onAuthStateChanged(auth, (i) => {
-      if (i) {
-        setUser(i);
-        setId(i.uid);
-      } else {
-        setUser(null);
-      }
-    });
 
-    return () => a();
-  }, []);
   return (
     <div>
-      <h1>your tasks {props.userId}</h1>
-      <h2>search task</h2>
+      <h1>your tasks </h1>
+      <h2>search task {email}</h2>
 
       <input type="text" onChange={(e) => display(e)} />
       <br />
@@ -138,7 +136,7 @@ export default function Task(props) {
         </div>
       </form>
 
-      <button onClick={add}>add task</button>
+      <button onClick={add}>add task </button>
 
       {listDisplay.map(function (d, i) {
         return (
