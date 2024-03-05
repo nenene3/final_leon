@@ -13,6 +13,7 @@ import {auth} from '../firebase-config'
 import "./a.css";
 import { db } from "../firebase-config";
 export default function Task(props) {
+  let [user,setUser] =useState(null);
   let [taskName, setTaskName] = useState("");
   let [details, setDetails] = useState("");
   let [list, setList] = useState([]);

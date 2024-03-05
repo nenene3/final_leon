@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Switch, Route, Link } from "react-router-dom";
-
+import Tasks from './components/Tasks'
 import Logging from "./components/Logging";
-import {} from "react-router-dom";
 import Welcome from "./components/Welcome";
 function App() {
   return (
@@ -13,7 +12,7 @@ function App() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link to="/tasks">tasks</Link>
           </li>
           <li>
             <Link to="/logging">logging</Link>
@@ -21,8 +20,8 @@ function App() {
         </ul>
       </nav>
       <Switch>
-        <Route path="/about">
-          <Welcome />
+        <Route path="/Tasks">
+         <Tasks/>
         </Route>
         <Route path="/logging">
           <Logging/>
