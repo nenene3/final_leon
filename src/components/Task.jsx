@@ -1,7 +1,8 @@
-import React from 'react'
-import {doc,getDoc,updateDoc} from 'firebase/firestore'
-import {db} from '../firebase-config'
+import React, { useState } from "react";
+import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase-config";
 export default function Task(props) {
+  let [done, setDone] = useState(props.isComplete);
   let updateStatus = async (name) => {
     try {
       let docChange = doc(db, props.user, name);
@@ -16,8 +17,8 @@ export default function Task(props) {
   };
   let remove = async (name) => {
     try {
-      await deleteDoc(doc(db, props.id, name));
-
+      await deleteDoc(doc(db, props.user, name));
+      
       window.location.reload();
     } catch (e) {
       console.error(e);
@@ -28,23 +29,20 @@ export default function Task(props) {
       <div
         title={props.modify}
         className={`${
-          props.isComplete ? "finish" : `${props.i % 2 == 0 ? "task1" : "task2"}`
+          done ? "finish" : `${props.i % 2 == 0 ? "task1" : "task2"}`
         }`}
+        onClick={(e) => {
+          e.stopPropagation()
+          updateStatus(props.id);
+          setDone(!done);
+        }}
       >
         <p>{props.taskName}</p>
         <p>{props.details}</p>
-        <label>
-          {props.isComplete ? "finish" : "notfinish"}
-          <input
-            type="checkbox"
-            name="done"
-            id="done"
-            onChange={() => updateStatus(props.id)}
-            defaultChecked={props.isComplete}
-          />
-        </label>
+
+        <h3>{done ? "finish" : "notfinish"}</h3>
         <br />
-        <button onClick={() => remove(props.id)}>remove</button>
+        <button onClick={(e) => {remove(props.id) ;e.stopPropagation() }}>remove</button>
         <button>edit</button>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { Switch, Route, Link } from "react-router-dom";
 import Tasks from './components/Tasks'
 import Logging from "./components/Logging";
 import Welcome from "./components/Welcome";
+import './App.css'
 function App() {
   return (
     <div>
