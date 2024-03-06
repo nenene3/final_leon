@@ -62,7 +62,7 @@ export default function Task(props) {
           </div>
         </div>
       )}
-      <button onClick={() => setEdit(!edit)}>edit</button>
+      <button onClick={(e) => { e.stopPropagation();setEdit(!edit)}}>edit</button>
     </div>
   );
 }

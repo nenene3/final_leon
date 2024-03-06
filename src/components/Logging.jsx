@@ -6,7 +6,6 @@ import {
   signOut,
 } from "firebase/auth";
 import { db, auth } from "../firebase-config";
-import Task from "./Tasks";
 export default function Logging() {
   let [user, setUser] = useState(null);
   let [password, setPassword] = useState(null);
