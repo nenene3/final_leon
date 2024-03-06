@@ -28,24 +28,31 @@ export default function Task(props) {
     }
   };
   return (
-    <div>
+    <div
+      className={`${
+        done ? "finish" : `${props.i % 2 == 0 ? "task1" : "task2"}`
+      }`}
+      style={{ display: "flex", justifyContent: "space-between" }}
+      title={props.modify}
+      onClick={(e) => {
+        e.stopPropagation();
+        updateStatus(props.id);
+        if(!edit){
+
+          setDone(!done);
+        }
+      }}
+    >
       {edit ? (
-        <EditTask 
-          taskName={props.taskName} details={props.details} user={props.user} id={props.id}
+        <EditTask
+          taskName={props.taskName}
+          details={props.details}
+          user={props.user}
+          id={props.id}
         />
       ) : (
         <div>
-          <div
-            title={props.modify}
-            className={`${
-              done ? "finish" : `${props.i % 2 == 0 ? "task1" : "task2"}`
-            }`}
-            onClick={(e) => {
-              e.stopPropagation();
-              updateStatus(props.id);
-              setDone(!done);
-            }}
-          >
+          <div>
             <p>{props.taskName}</p>
             <p>{props.details}</p>
 
@@ -53,8 +60,8 @@ export default function Task(props) {
             <br />
             <button
               onClick={(e) => {
-                remove(props.id);
                 e.stopPropagation();
+                remove(props.id);
               }}
             >
               remove
@@ -62,7 +69,19 @@ export default function Task(props) {
           </div>
         </div>
       )}
-      <button onClick={(e) => { e.stopPropagation();setEdit(!edit)}}>edit</button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          if (done) {
+            alert("you finished this task");
+            return;
+          }
+          setEdit(!edit);
+        }}
+        style={{ margin: "0px" }}
+      >
+        edit
+      </button>
     </div>
   );
 }

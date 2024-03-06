@@ -1,12 +1,16 @@
 .finish{
     background-color:rgb(86,103,117) ;
     text-decoration: line-through;
+    border: 10px solid black;
 }
 .task1{
     background-color:rgb(253,245,227) ;
-    color:black
+    color:black;
+    border: 10px solid black;
+    
 }
 .task2{
     background-color:rgb(239,231,213) ;
-    color:black
+    color:black;
+    border: 10px solid black;
 }

@@ -5,6 +5,9 @@ export default function EditTask(props) {
   let [d, setD] = useState("");
   let [name1, setName] = useState("");
   let updateStatus = async (name) => {
+    if(!d || !name1){
+      return;
+    }
     try {
       let docChange = doc(db, props.user, name);
       const docSnap = await getDoc(docChange);
@@ -19,7 +22,7 @@ export default function EditTask(props) {
     }
   };
   return (
-    <div>
+    <div style={{display:"flex", flexDirection:"column", padding:"36px"}}>
       <input
         placeholder={props.taskName}
         onChange={(e) => {

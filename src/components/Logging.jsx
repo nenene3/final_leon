@@ -6,6 +6,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { db, auth } from "../firebase-config";
+import {Box, Typography, Button} from "@mui/material"
 export default function Logging() {
   let [user, setUser] = useState(null);
   let [password, setPassword] = useState(null);
@@ -24,7 +25,7 @@ export default function Logging() {
     return () => a();
   }, []);
 
-  let createUser = async () => {
+  const createUser = async () => {
     try {
       let u = await createUserWithEmailAndPassword(auth, email, password);
     } catch (err) {
@@ -39,17 +40,51 @@ export default function Logging() {
     }
   };
 
+
+  const mainContainerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    
+  }
+  // border: "1px solid white"
+
+
+  const loggingForm = {
+    display: "flex",
+    flexDirection: "column",
+    position: "relative",
+    bottom: "15%",
+    gap: "1rem",
+    justifyContent: "center",
+    alignItems: "center",
+  }
+
+  const inputStyle = {
+    width: "80%",
+    textAlign: "center"
+  }
+
+  const btnStyle = {
+    width: "80%",
+    backgroundColor: "black"
+  }
+
   return (
-    <div>
+    <Box sx={mainContainerStyle}>
       {user ? (
-        <div>
+        <Box>
+          
           <button onClick={() => signOut(auth)}>sign out</button>
           {/* <button onClick={() => console.log(id)}>return</button> */}
           
-        </div>
+        </Box>
       ) : (
-        <div>
+        <Box sx={loggingForm}>
+          <Typography variant="h3" color="initial">Sign in \ Register</Typography>
           <input
+            style={inputStyle}
             type="text"
             placeholder="email"
             onChange={(e) => {
@@ -57,14 +92,15 @@ export default function Logging() {
             }}
           />
           <input
+          style={inputStyle}
             type="text"
             placeholder="password"
             onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
-          <button onClick={createUser}>create user</button>
-          <button
+                <Button
+            style={btnStyle}
             onClick={async () => {
               try {
                 let a = await signInWithEmailAndPassword(auth, email, password);
@@ -73,10 +109,12 @@ export default function Logging() {
               }
             }}
           >
-            log in
-          </button>
-        </div>
+            Login
+          </Button>
+          <Button style={btnStyle} onClick={createUser}>Register</Button>
+    
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }

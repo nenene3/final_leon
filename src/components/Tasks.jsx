@@ -14,6 +14,9 @@ import { getAuth } from "firebase/auth";
 import "./a.css";
 import { db } from "../firebase-config";
 import Task from "./Task";
+
+import {Box, Typography, Button, Grid} from "@mui/material"
+
 export default function Tasks() {
   let[email,setEmail]=useState("");
   let [user, setUser] = useState(null);
@@ -85,7 +88,7 @@ export default function Tasks() {
     try {
       await deleteDoc(doc(db, user, name));
 
-      window.location.reload();
+      // window.location.reload();
     } catch (e) {
       console.error(e);
     }
@@ -112,48 +115,94 @@ export default function Tasks() {
     }
   };
 
-  return (
-    <div>
-      {user ? (
-        <div>
-          <h1>your tasks </h1>
-          <h2>search task {email}</h2>
+  const mainContainerStyle ={
+    display: "flex",
+    justifyContent: 'center',
+    width: "100%",
+    height: "100%",
+  }
 
-          <input type="text" onChange={(e) => display(e)} />
-          <br />
-          <br />
+  const contentStyle = {
+    width: "100%",    
+  }
 
-          <form style={{ display: "inline-flex", border: "solid black 6px" }}>
-            <div>
-              <input
-                type="text"
-                placeholder="task name"
-                onChange={(e) => setTaskName(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="details"
-                onChange={(e) => setDetails(e.target.value)}
-              />
-            </div>
-          </form>
+  const actionPanelStyle = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "2rem",
+    textAlign: "center",
+    border: "1px solid white",
+    backgroundColor: "black",
+    padding: "1rem",
+    height: "fit-content"
+  }
 
-          <button onClick={add}>add task </button>
+  const createActionPanel = () => {
 
-          {listDisplay.map(function (d, i) {
+    const newTaskBtnStyle = {
+      width: "100%",
+      backgroundColor: "grey",
+    }
+
+    return (
+      <Grid item sm={12} md={3} xs={12} sx={actionPanelStyle}>
+        <Typography variant="h5" color="initial">
+          Search Task:
+        </Typography>
+        <input type="text" onChange={(e) => display(e)} />
+        <Box display={"flex"} flexDirection={"column"} gap={"1rem"}>
+          <Typography variant="h5" color="initial">
+            Add New Task:
+          </Typography>
+          <input
+            type="text"
+            placeholder="task name"
+            onChange={(e) => setTaskName(e.target.value)}
+          />
+          <textarea
+            style={{ height: "5rem" }}
+            type="text"
+            placeholder="details"
+            onChange={(e) => setDetails(e.target.value)}
+          />
+        </Box>
+
+        <Button sx={newTaskBtnStyle} onClick={add}>
+          add task{" "}
+        </Button>
+      </Grid>
+    );
+  }
+
+  const showTaskList = () => {
+    return (
+      <Grid item xs={12} sm={12} md={9} >
+          {listDisplay.map((d, i) => {
             return (
-              <Task isComplete={d.isComplete} taskName={d.taskName} details={d.details} id={d.id} modify={d.modify} i={i} user={user}/>
+              <Task key={i} isComplete={d.isComplete} taskName={d.taskName} details={d.details} id={d.id} modify={d.modify} i={i} user={user}/>
             );
           })}
+          </Grid>
+    )
+  }
 
-          <br />
-          <br />
-        </div>
+  return (
+    <Box sx={mainContainerStyle}>
+      {user ? (
+        <Box width={"100%"} height={"100%"} display={"flex"} flexDirection={"column"} alignItems={"center"}>
+          <h1>Your Tasks: {email}</h1>
+          <Grid container spacing={2} sx={contentStyle}>
+            {createActionPanel()}
+            {showTaskList()}
+          </Grid>
+        </Box>
       ) : (
-        <div>
+        <Box>
           <h1>pls log in</h1>
-        </div>
+        </Box>
+        
       )}
-    </div>
+      
+    </Box>
   );
 }
