@@ -93,7 +93,7 @@ export default function Logging() {
           />
           <input
           style={inputStyle}
-            type="text"
+            type="password"
             placeholder="password"
             onChange={(e) => {
               setPassword(e.target.value);
